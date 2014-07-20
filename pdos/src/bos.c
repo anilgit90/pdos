@@ -16,19 +16,18 @@
 static void int86n(unsigned int intno);
 static void int86i(unsigned int intno, union REGS *regsin);
 
-/* BosGetSystemTime-BIOS Int 1Ah/AH=00h */
+/*BosGetSystemTime-BIOS Int 1Ah/AH=00h*/
 /* 
    Input: Pointers to variable Ticks(long) and midnight(int).
-   Output: None.
+   Output: Returns ticks and midnight flag.
    Notes: None.
 */
-
 void BosGetSystemTime(unsigned long *ticks, unsigned int *midnight)
 {
     union REGS regsin;
     union REGS regsout;
 
-    regsin.h.ah = 0x00;
+    regsin.h.ah=0x00;
     
     int86(0x1A,&regsin,&regsout);
     
@@ -38,37 +37,31 @@ void BosGetSystemTime(unsigned long *ticks, unsigned int *midnight)
     return;
 }
 
-/* BosGetSystemTime-BIOS Int 1Ah/AH=04h */
-/*
-   Input: Pointers to century(int),year(int),month(int),day(int).
-   Output: Returns 0 on successful call.
-   Notes: Clear the carry flag before interuppt Some ROM leave carry
-          flag unchanged on successful call.
-*/
+/*BosGetSystemTime-BIOS Int 1Ah/AH=04h*/
 
-unsigned int BosGetSystemDate(int *century,int *year,int *month,int *day)
+int BosGetSystemDate(int *century,int *year,int *month,int *day)
 {
     union REGS regsin;
     union REGS regsout;
 
-    regsin.h.ah = 0x04;
-    //regsin.x.cflag = 0x00; // TODO: Clearing the Carry flag.
+    regsin.h.ah=0x04;
     int86(0x1A,&regsin,&regsout);
-    
-    *century = regsout.h.ch;
-    *year = regsout.h.cl;
-    *month = regsout.h.dh;
-    *day = regsout.h.dl;
+    *century=regsout.h.ch;
+    *year=regsout.h.cl;
+    *month=regsout.h.dh;
+    *day=regsout.h.dl;
 
     if(regsout.x.cflag)
     {
-        return(BOS_ERROR);
+        return(-1);
     }
     else
     {
         return(0);
     }
 }
+
+/**/
 
 /* BosPrintScreen - BIOS Int 05h */
 

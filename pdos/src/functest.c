@@ -284,7 +284,7 @@ static int testAbsoluteDiskRead(void)
 }
 /**/
 
-/* Test function to test BIOS Call Int 1A/AH=00h */
+/*Test function to test BIOS Call Int 1A/AH=00H*/
 static int testBosGetSystemTime(void)
 {
     unsigned long ticks;
@@ -310,21 +310,27 @@ static int testBosGetSystemTime(void)
     return 0;
 }
 
-/* Test function to test BIOS call Int 1a/AH=04h */
+/*Converting BCD to int*/
+int Bcd2Int(unsigned char bcd)
+{
+    return (bcd & 0x0f) + 10 * ((bcd >> 4) & 0x0f);
+}
+/**/
+
+/*Test Function- to get the system date using BIOS call*/
 static int testBosGetSystemDate(void)
 {
     int c,y,m,d;
     int ret;
 
-    ret = BosGetSystemDate(&c,&y,&m,&d);
-    printf("Century %x \n",c);
-    printf("Year %x \n",y);
-    printf("Month %x \n",m);
-    printf("Day %x \n",d);
+    ret=BosGetSystemDate(&c,&y,&m,&d);
+    printf("Century %d \n",Bcd2Int(c));
+    printf("Year %d \n",Bcd2Int(y));
+    printf("Month %d \n",Bcd2Int(m));
+    printf("Day %d \n",Bcd2Int(d));
     printf("Return Code is %d",ret);
-    
-    return 0;
 }
+/**/
 
 /*Testing function - to get the Date using PDOS call*/
 static int testPosGetSystemDate(void)
@@ -446,19 +452,16 @@ static int testPosCreatFile(void)
 
 int main(void)
 {
-    /* Successful Tests*/
-    /*testBosGetSystemTime();*/    
-    /*testBosGetSystemDate();*/
-    
     /*testDriveParms();*/
     /*testDisk();*/
     /*testExtendedMemory();*/
     /*testGenericBlockDeviceRequest();*/
     /*testAbsoluteDiskRead();*/
     /*testPosGetSystemDate();*/
-    /*testPosGetSystemTime();*/    
+    /*testPosGetSystemTime();*/
+    testBosGetSystemTime();
     /*testPosRenameFile();*/
-    /*testPosDeleteFile();*/
+   /* testPosDeleteFile();*/
     /*testPosGetFileAttributes();*/
     /*testPosGetFreeSpace();*/
     /*testPosGetFileLastWrittenDateAndTime();*/ 
