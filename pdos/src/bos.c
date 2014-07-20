@@ -55,6 +55,7 @@ unsigned int BosGetSystemDate(int *century,int *year,int *month,int *day)
 
     regsin.h.ah = 0x04;
     /*regsin.x.cflag = 0x00; TODO: Clearing the Carry flag.*/
+    
     int86(0x1A,&regsin,&regsout);
     
     *century = regsout.h.ch;
@@ -83,6 +84,7 @@ unsigned int BosGetSystemDate(int *century,int *year,int *month,int *day)
 void BosPrintScreen(void)
 {
     int86n(0x05);
+    
     return;
 }
 
@@ -111,22 +113,35 @@ unsigned int BosSetVideoMode(unsigned int mode)
 
 
 /* BosSetCursorType - BIOS Int 10h Function 01h */
-
-int BosSetCursorType(int top, int bottom)
+/*
+    Input: Top and Bottom of cursor
+    Returns: None
+    Notes:
+*/
+    
+void BosSetCursorType(unsigned int top, unsigned int bottom)
 {
     union REGS regsin;
 
     regsin.h.ah = 0x01;
     regsin.h.ch = top;
     regsin.h.cl = bottom;
+    
     int86i(0x10, &regsin);
-    return (0);
+    
+    return;
 }
 
 
 /* BosSetCursorPosition - BIOS Int 10h Function 02h */
+/*
+   Input: page number, row and column
+   Returns: None.
+   Notes: None.
+*/
 
-int BosSetCursorPosition(int page, int row, int column)
+void BosSetCursorPosition(unsigned int page, unsigned int row, 
+                          unsigned int column)
 {
     union REGS regsin;
 
@@ -134,8 +149,10 @@ int BosSetCursorPosition(int page, int row, int column)
     regsin.h.bh = page;
     regsin.h.dh = row;
     regsin.h.dl = column;
+    
     int86i(0x10, &regsin);
-    return (0);
+    
+    return;
 }
 
 
