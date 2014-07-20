@@ -1289,27 +1289,44 @@ int PosGetDefaultDrive(void)
     return (currentDrive);
 }
 
-/*Function to Return the date using BIOS call*/
+/* Function to Return the date using BIOS call */
+/*
+   Input: Pointers to BosGetSystemDate().
+   Output: None.
+   Notes: None.
+*/
 void PosGetSystemDate(int *year, int *month, int *day, int *dw)
 {
     int c,y,m,d;
+    int retval;
 
-    BosGetSystemDate(&c,&y,&m,&d);
-    *year=bcd2int(c) * 100 + bcd2int(y);
-    *month=bcd2int(m);
-    *day=bcd2int(d);
-    *dw=dow(*year,*month,*day);
-    return 0;
+    retval = BosGetSystemDate(&c,&y,&m,&d);
+    
+    if(retval == 0)
+    {
+        *year = bcd2int(c) * 100 + bcd2int(y);
+        *month = bcd2int(m);
+        *day = bcd2int(d);
+        *dw = dow(*year,*month,*day);
+    }
+    
+    return;
 }
-/**/
 
-/*Function to display time by converting ticks retrieved from BIOS 
-  call into timeformat*/
+/* Function to display time by converting ticks retrieved from BIOS 
+   call into timeformat */
+/* 
+   Input: Number of ticks returned by BosGetSystemTime().
+   Output: None. 
+   Notes: Converts the number of ticks to time format.
+*/
 void PosGetSystemTime(int *hour, int *minute, int *second, int *hundredths)
 {
     unsigned long ticks,t;
+    unsigned int midnight;
 
-    ticks=BosGetSystemTime();
+    BosGetSystemTime(&ticks,&midnight);
+    
     t=(ticks*1000)/182;
     *hundredths=(int)t%100;
     t/=100;
@@ -1318,9 +1335,8 @@ void PosGetSystemTime(int *hour, int *minute, int *second, int *hundredths)
     *minute=(int)t%60;
     t/=60;
     *hour=(int)t;
-    return 0;
+    return;
 }
-/**/
 
 void *PosGetDTA(void)
 {
