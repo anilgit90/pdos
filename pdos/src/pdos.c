@@ -1238,27 +1238,26 @@ unsigned int PosDisplayOutput(unsigned int ch)
     return ch;
 }
 
-/*Get Character Input from DOS*/
-int PosDirectCharInputNoEcho(void)
+/* INT 21/AH=07h */
+unsigned int PosDirectCharInputNoEcho(void)
 {
     int scan;
     int ascii;
-
     
     BosReadKeyboardCharacter(&scan, &ascii);
 
     return ascii;
 }
-/**/
+
 
 
 /* Written By NECDET COKYAZICI, Public Domain */
 
-int PosGetCharInputNoEcho(void)
+/* INT 21/AH=08h */
+unsigned int PosGetCharInputNoEcho(void)
 {
     int scan;
     int ascii;
-
 
     BosReadKeyboardCharacter(&scan, &ascii);
 
