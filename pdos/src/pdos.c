@@ -622,7 +622,9 @@ static void int21handler(union REGS *regsin,
             break;
             
         case 0x2b:
-            regsout->h.al = PosSetSystemDate(regsin->x.cx,regsin->h.dh,regsin->h.dl);
+            regsout->h.al = PosSetSystemDate(regsin->x.cx,
+                                             regsin->h.dh,
+                                             regsin->h.dl);
             break;
 
         case 0x2c:
@@ -1282,6 +1284,8 @@ unsigned int PosDisplayString(const char *buf)
 /* INT 21/AH=0Eh */
 unsigned int PosSelectDisk(unsigned int drive)
 {
+    unsigned int ret;
+    
     currentDrive = drive;
     
     if (drive < 2)
@@ -1290,7 +1294,15 @@ unsigned int PosSelectDisk(unsigned int drive)
     }
     
     cwd = disks[drive].cwd;
-    return (lastDrive);
+
+    ret = lastDrive;
+    
+    if (ret < 5)
+    {
+        ret = 5;
+    }
+
+    return (ret);
 }
 
 /* INT 21/AH=19h */
