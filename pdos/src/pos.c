@@ -137,7 +137,7 @@ unsigned int PosDisplayString(const char *buf)
 /*
     Input: Default drive number(00h = A:, 01h = B:, etc).
     Returns: Number of potentially valid drive letters.
-    Notes:
+    Notes: None.
 */
 
 unsigned int PosSelectDisk(unsigned int drive)
@@ -152,15 +152,30 @@ unsigned int PosSelectDisk(unsigned int drive)
     return (regsout.h.al);
 }
 
-int PosGetDefaultDrive(void)
+/* PosGetDefaultDrive-INT 21/AH=19h */
+/*
+    Input: None.
+    Returns: Current Default Drive.
+    Notes: AL = drive (00h = A:, 01h = B:, etc)
+*/
+
+unsigned int PosGetDefaultDrive(void)
 {
     union REGS regsin;
     union REGS regsout;
 
     regsin.h.ah = 0x19;
+    
     int86(0x21, &regsin, &regsout);
     return (regsout.h.al);
 }
+
+/* PosSetDTA-INT 21/AH=1Ah */
+/*
+    Input: None.
+    Returns: Set Disk Transfer Area Address
+    Notes: None.
+*/
 
 void PosSetDTA(void *dta)
 {
@@ -178,6 +193,13 @@ void PosSetDTA(void *dta)
     int86x(0x21, &regsin, &regsout, &sregs);
     return;
 }
+
+/* PosSetInterruptVector-INT 21/AH=25h */
+/*
+    Input: None.
+    Returns: Set Interrupt Vector
+    Notes: None.
+*/
 
 void PosSetInterruptVector(int intnum, void *handler)
 {
@@ -197,6 +219,13 @@ void PosSetInterruptVector(int intnum, void *handler)
     return;
 }
 
+/* PosGetSystemDate-INT 21/AH=2Ah */
+/*
+    Input: None.
+    Returns: Get System Date
+    Notes: None.
+*/
+
 void PosGetSystemDate(int *year, int *month, int *day, int *dw)
 {
     union REGS regsin;
@@ -210,6 +239,15 @@ void PosGetSystemDate(int *year, int *month, int *day, int *dw)
     *dw = regsout.h.al;
     return;
 }
+
+/* PosGetSystemTime-INT 21/AH=2Ch */
+/*
+    Input: None.
+    Returns: Get System Time.
+    Notes:  On most systems, the resolution of the system clock
+            is about 5/100sec,so returned times generally do not 
+            increment by 1. On some systems, DL may always return 00h. 
+*/
 
 void PosGetSystemTime(int *hour, int *min, int *sec, int *hundredths)
 {

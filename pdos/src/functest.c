@@ -339,7 +339,7 @@ static int testBosGetSystemDate(void)
     return 0;
 }
 
-/*Testing function - to get the Date using PDOS call*/
+/* Test function to test POS Call Int 21/AH=2Ah */
 static int testPosGetSystemDate(void)
 {
     int y,m,d,dw;
@@ -354,9 +354,8 @@ static int testPosGetSystemDate(void)
     return 0;
 
 }
-/**/
 
-/*Test function - to get the time using PDOS call*/
+/* Test function to test POS Call Int 21/AH=2Ch */
 static int testPosGetSystemTime(void)
 {
     int hr,min,sec,hund;
@@ -511,12 +510,24 @@ static int testPosDisplayString(void)
     return 0;
 }
 
+/* Test function to test POS call Int 21/AH=0Eh */
 static int testPosSelectDisk(void)
 {
     unsigned int ret;
     unsigned int test = 2;
         
     ret = PosSelectDisk(test);
+    printf("\n");
+    printf("The return value is x %d x \n",ret);
+    return 0;
+}
+
+
+static int testPosGetDefaultDrive(void)
+{
+    unsigned int ret;
+        
+    ret = PosGetDefaultDrive();
     printf("\n");
     printf("The return value is x %d x \n",ret);
     return 0;
@@ -539,17 +550,17 @@ int main(void)
     /*testPosDisplayOutput();*/
     /*testPosDirectCharInputNoEcho();*/
     /*testPosGetCharInputNoEcho();*/    
-    /*testPosDisplayString();*/
-    
-    testPosSelectDisk();  
+    /*testPosDisplayString();*/    
+    /*testPosSelectDisk();*/  
+    /*testPosGetDefaultDrive();*/
+    /*testPosGetSystemDate();*/
+    /*testPosGetSystemTime();*/ 
     
     /*testDriveParms();*/
     /*testDisk();*/
     /*testExtendedMemory();*/
     /*testGenericBlockDeviceRequest();*/
     /*testAbsoluteDiskRead();*/
-    /*testPosGetSystemDate();*/
-    /*testPosGetSystemTime();*/    
     /*testPosRenameFile();*/
     /*testPosDeleteFile();*/
     /*testPosGetFileAttributes();*/
