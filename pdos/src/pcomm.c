@@ -332,9 +332,10 @@ static void dover(void)
 
 static void dopath(char *s)
 {    
-     if (strcmp(s,"") == 0)
+     if (strcmp(s, "") == 0)
      {
         char *t;
+
         t = path;
         
         if (*t == ';')
@@ -349,7 +350,7 @@ static void dopath(char *s)
         
         else
         {
-            printf("%s\n",t);
+            printf("%s\n", t);
         }
      }
      
